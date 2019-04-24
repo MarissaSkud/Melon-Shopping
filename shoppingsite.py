@@ -58,7 +58,26 @@ def show_melon(melon_id):
 def show_shopping_cart():
     """Display content of shopping cart."""
 
-    # TODO: Display the contents of the shopping cart.
+    try:
+        cart_contents = session["cart"]
+        melons_in_cart = []
+        total_cost = 0.00
+
+        for melon_id in cart_contents:
+            melon = melons.get_by_id(melon_id)
+
+            melon_subtotal = melon.price * cart_contents[melon_id]
+            total_cost += melon_subtotal
+
+            melon.quantity = cart_contents[melon_id]
+            melon.subtotal = melon_subtotal
+
+            melons_in_cart.append(melon)
+
+    except KeyError:
+        pass
+
+    #print(total_cost) #THIS WORKS FINE
 
     # The logic here will be something like:
     #
@@ -76,7 +95,8 @@ def show_shopping_cart():
     # Make sure your function can also handle the case wherein no cart has
     # been added to the session
 
-    return render_template("cart.html")
+    return render_template("cart.html", total_cost = total_cost, 
+                            melons_in_cart = melons_in_cart)
 
 
 @app.route("/add_to_cart/<melon_id>")
@@ -91,15 +111,14 @@ def add_to_cart(melon_id):
     if "cart" not in session.keys():
         session["cart"] = {}
         session["cart"][melon_id] = 1
-        print(session)
-        flash("Melon successfully added!")
+        #print(session)
 
     else:
         session["cart"][melon_id] = session["cart"].get(melon_id, 0) + 1
-        print(session)
-        flash("Melon successfully added!")
+        #print(session)
     
-    return render_template("cart.html")
+    flash("Melon successfully added!")
+    return redirect("/cart")
 
 
 @app.route("/login", methods=["GET"])
