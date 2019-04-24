@@ -88,13 +88,18 @@ def add_to_cart(melon_id):
     page and display a confirmation message: 'Melon successfully added to
     cart'."""
 
-    if session["cart"] == False:
+    if "cart" not in session.keys():
         session["cart"] = {}
+        session["cart"][melon_id] = 1
+        print(session)
+        flash("Melon successfully added!")
 
     else:
         session["cart"][melon_id] = session["cart"].get(melon_id, 0) + 1
+        print(session)
         flash("Melon successfully added!")
-        return render_template("cart.html")
+    
+    return render_template("cart.html")
 
 
 @app.route("/login", methods=["GET"])
