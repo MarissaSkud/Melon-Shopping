@@ -93,12 +93,8 @@ def add_to_cart(melon_id):
 
     if "cart" not in session.keys():
         session["cart"] = {}
-        session["cart"][melon_id] = 1
-        #print(session)
 
-    else:
-        session["cart"][melon_id] = session["cart"].get(melon_id, 0) + 1
-        #print(session)
+    session["cart"][melon_id] = session["cart"].get(melon_id, 0) + 1
     
     flash("Melon successfully added!")
     return redirect("/cart")
