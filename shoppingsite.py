@@ -58,10 +58,11 @@ def show_melon(melon_id):
 def show_shopping_cart():
     """Display content of shopping cart."""
 
+    melons_in_cart = []
+    total_cost = 0.00
+
     try:
         cart_contents = session["cart"]
-        melons_in_cart = []
-        total_cost = 0.00
 
         for melon_id in cart_contents:
             melon = melons.get_by_id(melon_id)
@@ -76,24 +77,6 @@ def show_shopping_cart():
 
     except KeyError:
         pass
-
-    #print(total_cost) #THIS WORKS FINE
-
-    # The logic here will be something like:
-    #
-    # - get the cart dictionary from the session
-    # - create a list to hold melon objects and a variable to hold the total
-    #   cost of the order
-    # - loop over the cart dictionary, and for each melon id:
-    #    - get the corresponding Melon object
-    #    - compute the total cost for that type of melon
-    #    - add this to the order total
-    #    - add quantity and total cost as attributes on the Melon object
-    #    - add the Melon object to the list created above
-    # - pass the total order cost and the list of Melon objects to the template
-    #
-    # Make sure your function can also handle the case wherein no cart has
-    # been added to the session
 
     return render_template("cart.html", total_cost = total_cost, 
                             melons_in_cart = melons_in_cart)
